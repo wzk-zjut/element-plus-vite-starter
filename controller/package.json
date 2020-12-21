@@ -1,0 +1,19 @@
+{
+  "name": "release-controller",
+  "version": "1.0.0",
+  "description": "node转发接口",
+  "main": "app.js",
+  "dependencies": {
+    "koa": "^2.13.0",
+    "koa-router": "^10.0.0",
+    "koa2-cors": "^2.0.6",
+    "nodemon": "^2.0.6",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "author": "wangzhengkai",
+  "license": "ISC"
+}

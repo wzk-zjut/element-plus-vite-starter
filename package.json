@@ -1,16 +1,24 @@
 {
-  "name": "element-plus-vite-starter",
-  "version": "0.0.0",
+  "name": "release-time",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build"
+    "dev:frontend": "cd frontend & npm run dev",
+    "dev:controller": "cd controller & npm start",
+    "dev": "concurrently \"npm run dev:controller\" \"npm run dev:frontend\""
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wzk-zjut/element-plus-vite-starter.git"
+  },
+  "author": "wangzhengkai",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wzk-zjut/element-plus-vite-starter/issues"
+  },
+  "homepage": "https://github.com/wzk-zjut/element-plus-vite-starter#readme",
   "dependencies": {
-    "element-plus": "latest",
-    "vue": "^3.0.2"
-  },
-  "devDependencies": {
-    "vite": "^1.0.0-rc.8",
-    "@vue/compiler-sfc": "^3.0.2"
+    "concurrently": "^5.3.0"
   }
 }
