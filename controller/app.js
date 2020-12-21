@@ -11,6 +11,7 @@ const {
 
 const app = new Koa();
 
+// 解决跨域
 app.use(cors({
     origin: (ctx) => {
         return '*'

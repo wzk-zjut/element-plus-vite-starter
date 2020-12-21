@@ -1,14 +1,20 @@
 <template>
-    <ReleaseTable />
+    <el-container>
+        <el-aside>
+            <Menu />
+        </el-aside>
+        <el-main>
+            <router-view></router-view>
+        </el-main>
+    </el-container>
 </template>
 
 <script>
-import ReleaseTable from './view/ReleaseTable.vue'
-
+import Menu from './components/Menu.vue'
 export default {
     name: 'App',
     components: {
-        ReleaseTable
+        Menu
     }
 }
 </script>

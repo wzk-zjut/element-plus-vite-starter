@@ -3,6 +3,7 @@ const fs = require('fs')
 
 let cacheObj = JSON.parse(cachestr)
 
+// 处理params
 const formatParams = (params) => {
     let arr = []
     Object.keys(params).map(val => {
@@ -12,6 +13,7 @@ const formatParams = (params) => {
     return paramsStr
 }
 
+// 读取缓存逻辑
 const getCache = (params) => {
     const paramsStr = formatParams(params)
     return new Promise((resolve, reject) => {
@@ -32,6 +34,7 @@ const getCache = (params) => {
     })
 }
 
+// 缓存逻辑
 const cacheCD = (data, params) => {
     const paramsStr = formatParams(params)
     return new Promise((resolve, reject) => {
