@@ -40,14 +40,15 @@ const cacheCD = (data, params) => {
     return new Promise((resolve, reject) => {
         const nowTime = (new Date()).getTime();
         if ((new Date(cacheObj.time)).getDate() === (new Date(nowTime)).getDate()) {
-            const res = cacheObj.cache.filter(item => {
+            const res = cacheObj.cache.some(item => {
                 return item.params == paramsStr
             })
-            if (res.length !== 0) {
-                cacheObj.cache.map(item => {
+            if (res) {
+                cacheObj.cache = cacheObj.cache.map(item => {
                     if (item.params == paramsStr) {
                         item.data = data
                     }
+                    return item
                 })
             } else {
                 cacheObj.cache.push({
@@ -76,5 +77,6 @@ const cacheCD = (data, params) => {
 
 module.exports = {
     getCache,
-    cacheCD
+    cacheCD,
+    formatParams
 }

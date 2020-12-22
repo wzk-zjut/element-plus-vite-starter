@@ -116,39 +116,26 @@ export default {
                 }
                 for (let j = i + 1; j < data.length; j++) {
                     if (data[i].program_name == data[j].program_name) {
-                        data.splice(j, 1);
-                        j--;
                         const programObj = repeatObj[data[i].program_name];
+                        programObj.average_release_time = ((programObj.average_release_time * programObj.total + data[j].average_release_time * data[j].total) /
+                            (programObj.total + data[j].total)
+                        ).toFixed(1);
                         programObj.total += data[j].total;
                         programObj.failure += data[j].failure;
-                        programObj.average_release_time = (
-                            (programObj.average_release_time +
-                                data[j].average_release_time) /
-                            programObj.total
-                        ).toFixed(1);
-                        programObj.max_release_time =
-                            programObj.max_release_time >
-                            data[j].max_release_time
-                                ? programObj.max_release_time
-                                : data[j].max_release_time;
+                        programObj.max_release_time = programObj.max_release_time > data[j].max_release_time ? programObj.max_release_time : data[j].max_release_time;
+                        data.splice(j, 1);
+                        j--;
                     }
                 }
             }
             data.map((item: release.CDData) => {
                 const repeat = repeatObj[item.program_name];
                 item.average_release_time = parseFloat(
-                    (
-                        (item.average_release_time +
-                            parseFloat(repeat.average_release_time)) /
-                        (item.total + repeat.total)
-                    ).toFixed(1)
+                    ((item.average_release_time * item.total + parseFloat(repeat.average_release_time) * repeat.total) / (item.total + repeat.total)).toFixed(1)
                 );
                 item.total += repeat.total;
                 item.failure += repeat.failure;
-                item.max_release_time =
-                    item.max_release_time > repeat.max_release_time
-                        ? item.max_release_time
-                        : repeat.max_release_time;
+                item.max_release_time = item.max_release_time > repeat.max_release_time ? item.max_release_time : repeat.max_release_time;
             });
             releaseData.value = data;
         };
@@ -172,7 +159,10 @@ export default {
         };
 
         onMounted(() => {
-            getData({ env: "prod", program: "" }, true);
+            getData({ 
+                env: "prod",
+                program: "" ,
+                }, true);
         });
 
         return {
