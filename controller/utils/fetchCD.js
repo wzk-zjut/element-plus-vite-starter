@@ -1,4 +1,5 @@
 const request = require('request')
+const { fetch } = require('./utils')
 
 const fetchCD = (params) => {
     return new Promise((resolve, reject) => {
@@ -20,4 +21,21 @@ const fetchCD = (params) => {
     })
 }
 
-module.exports = fetchCD
+const fetchSnsCd = (arr, params) => {
+    return new Promise((resolve) => {
+        let resArr = []
+        arr.map(async (item, index) => {
+            let options = {...params, ...{program: item}}
+            await fetch('http://localhost:7280/getCdTime', options).then((res) => {
+                if(res.code == 1 && res.data[params.env]) {
+                    resArr = resArr.concat(res.data[params.env])
+                }
+            })
+            if(index == arr.length - 1) {
+                resolve(resArr)
+            }
+        })
+    })
+}
+
+module.exports = {fetchCD, fetchSnsCd}

@@ -1,17 +1,9 @@
 const cachestr = require('../cache/cache')
+const { formatParams } = require('./utils')
 const fs = require('fs')
 
 let cacheObj = JSON.parse(cachestr)
 
-// 处理params
-const formatParams = (params) => {
-    let arr = []
-    Object.keys(params).map(val => {
-        arr.push(`${val}=${params[val]}`)
-    })
-    const paramsStr = arr.join('&')
-    return paramsStr
-}
 
 // 读取缓存逻辑
 const getCache = (params) => {

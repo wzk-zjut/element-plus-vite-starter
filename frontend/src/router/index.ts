@@ -1,17 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import CDTable from '../view/CDTable.vue'
-import RelaseTable from '../view/ReleaseTable.vue'
+import ReleaseData from '../view/ReleaseData.vue'
 
 export default createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/',
-            component: RelaseTable
+            component: ReleaseData,
         },
         {
             path: '/CDTable',
-            component: CDTable
+            component: CDTable,
         }
     ]
 })

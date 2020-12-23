@@ -2,8 +2,8 @@ const Koa = require('koa')
 const router = require('koa-router')();
 const cors = require('koa2-cors')
 const getSign = require('./utils/getSign')
-const fetchCD = require('./utils/fetchCD')
-const { getCDData } = require('./utils/releaseData')
+const { fetchCD, fetchSnsCd } = require('./utils/fetchCD')
+const { getCDData, mock } = require('./utils/releaseData')
 const {
     getCache,
     cacheCD
@@ -68,24 +68,55 @@ router.get('/getCdTime', async ctx => {
     await cacheCD(JSON.parse(res).data, urlParmas)
 })
 
-// 发布数据集合接口
-// 接收参数 env:prod | test
-router.get('/releaseData', async ctx => {
+// 获取sns部门CD发布数据
+router.get('/getSnsCd', async ctx => { 
     const urlParmas = ctx.request.query
-    if(!urlParmas.env) {
+    if(urlParmas.env !== 'prod' && urlParmas.env !== 'test' && urlParmas.env !== 'staging') {
         ctx.body = {
             errorCode: 100,
-            errorMsg: "缺少env参数"
+            errorMsg: "参数错误"
+        }
+        return
+    }
+    const snsObj = [
+        'website-frontend-wd-container',
+        'sns-gsjl-frontend-container',
+        'sns-tgtab-frontend-container',
+        'sns-tgtab-frontend-preview',
+        'sns-groupchat-frontend-container',
+        'sns-groupchat-frontend-preview-container',
+        'sns-live-frontend-container',
+        'website-cmp-frontmainapp',
+        'sns-backstage-frontend-container'
+    ]
+    const res = await fetchSnsCd(snsObj, urlParmas)
+    ctx.body = {
+        errorCode: 0,
+        errorMsg: 'success',
+        result: res
+    }
+})
+
+// 发布数据集合接口
+// 接收参数 env:prod | test 
+router.get('/releaseData', async ctx => {
+    const urlParmas = ctx.request.query
+    if(urlParmas.env !== 'prod' && urlParmas.env !== 'test') {
+        ctx.body = {
+            errorCode: 100,
+            errorMsg: "参数错误"
         }
         return
     }
     let res = new Object()
     try{
-        const CDData = await getCDData('prod')
+        const CDData = await getCDData(urlParmas.env, urlParmas.isSns)
+        const mockData = await mock(urlParmas.env)
         res = {
             errorCode: 0,
             errorMsg: "success",
             result: {
+                ...mockData,
                 CD: CDData
             }
         }

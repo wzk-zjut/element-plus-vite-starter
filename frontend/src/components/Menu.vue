@@ -7,7 +7,7 @@
                  class="menu-container"
                  router>
             <el-menu-item index="/">发布数据</el-menu-item>
-            <el-menu-item index="CDTable">CD发布数据</el-menu-item>
+            <el-menu-item index="/CDTable">CD发布数据</el-menu-item>
         </el-menu>
     </div>
 </template>
@@ -18,7 +18,7 @@ import { useRoute } from "vue-router";
 export default {
     setup() {
         const route = useRoute();
-        const CDrouter = computed(() => route.path.substr(1));
+        const CDrouter = computed(() => route.path);
         return {
             CDrouter,
         };

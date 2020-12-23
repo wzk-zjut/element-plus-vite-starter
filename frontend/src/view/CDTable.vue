@@ -24,6 +24,16 @@
                     <el-radio-button label="测试"></el-radio-button>
                 </el-radio-group>
             </el-col>
+            <el-col :span="6" class="switch">
+                <el-switch 
+                v-model="isSns" 
+                :loading="isLoading"
+                @change="chooseSns"
+                active-text="sns项目" 
+                inactive-text="全部项目" 
+                active-color="#13ce66"
+                inactive-color="#ff4949"></el-switch>
+            </el-col>
         </el-row>
         <el-table :data="releaseData"
                   style="width: 100%"
@@ -77,6 +87,13 @@ export default {
         const searchOption = ref<string[]>([]);
         const envValue = ref<string>("正式");
         let isLoading = ref<boolean>(true);
+        let isSns = ref<boolean>(false)
+
+        const envObj: any = {
+                "正式": "prod",
+                "预发布": "staging",
+                "测试": "test",
+            };
 
         const getData = (params: any, flag = false) => {
             isLoading.value = true;
@@ -102,6 +119,31 @@ export default {
                     }
                 });
         };
+
+        const getSnsData = (params: any, flag = false) => {
+            isLoading.value = true;
+            window.snsHttp({
+                url: "http://localhost:7280/getSnsCd",
+                urlParams: params,
+                timeout: 120000
+            }).then((res: any) => {
+                const { errorCode, errorMsg, result } = res;
+                if(errorCode === 0) {
+                    isLoading.value = false;
+                    formatData(result);
+                    if(flag) {
+                        searchOption.value = []
+                        releaseData.value.map((item) => {
+                            if (item.program_name.indexOf("thsi_resource") == -1) {
+                                searchOption.value.push(item.program_name);
+                            }
+                        });
+                    }
+                } else {
+                    ElMessage.warning(errorMsg);
+                }
+            })
+        }
 
         const formatData = (data: release.CDData[]) => {
             let repeatObj: Record<string, any> = {};
@@ -141,22 +183,29 @@ export default {
         };
 
         const searchData = (value: string) => {
-            const envObj: any = {
-                正式: "prod",
-                预发布: "staging",
-                测试: "test",
-            };
-            getData({ env: envObj[envValue.value], program: value });
+            if(isSns.value) {
+                getSnsData({ env: envObj[envValue.value], program: value });
+            } else {
+                getData({ env: envObj[envValue.value], program: value });
+            }
         };
 
         const chooseEnv = (value: string) => {
-            const envObj: any = {
-                正式: "prod",
-                预发布: "staging",
-                测试: "test",
-            };
-            getData({ env: envObj[value], program: seachValue.value });
+            if(isSns.value) {
+                getSnsData({ env: envObj[value], program: seachValue.value }, true);
+            } else {
+                getData({ env: envObj[value], program: seachValue.value }, true);
+            }
         };
+
+        const chooseSns = (value: boolean) => {
+            seachValue.value = ''
+            if(value) {
+                getSnsData({env: envObj[envValue.value], program: "",}, true)
+            } else {
+                getData({env: envObj[envValue.value], program: "",}, true)
+            }
+        }
 
         onMounted(() => {
             getData({ 
@@ -173,6 +222,8 @@ export default {
             searchOption,
             envValue,
             chooseEnv,
+            chooseSns,
+            isSns
         };
     },
 };
@@ -197,5 +248,9 @@ export default {
 }
 .status-bar {
     margin: 10px 0;
+}
+.switch {
+    display: flex !important;
+    align-items: center;
 }
 </style>

@@ -9,4 +9,19 @@ declare namespace release {
         third_business: string;
         total: number;
     }
+
+    export interface releaseData {
+        devTime: timeType;
+        CI: timeType;
+        container: timeType;
+        CD: {
+            containerPh: timeType;
+            resourcePh?: timeType;
+        }
+    }
+
+    export interface timeType {
+        time: number;
+        differ: number;
+    }
 }
