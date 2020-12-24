@@ -87,13 +87,18 @@
                 </div>
             </el-card>
         </div>
+        <ReleasePie :data="releaseData" :env="envValue" v-if="releaseData"/>
     </div>
 </template>
 
 <script lang="ts">
 import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
+import ReleasePie from '../components/ReleasePie.vue'
 export default {
+    components: {
+        ReleasePie
+    },
     setup() {
         const envValue = ref("测试")
         const releaseData = ref<release.releaseData | null>(null)
@@ -153,7 +158,7 @@ export default {
         }
 
         const getTotalTime = (data: release.releaseData) => {
-            totalTime.value = data.devTime.time + data.CI.time + data.container.time + data.CD.containerPh.time;
+            totalTime.value = data.devTime.time + data.CI.time + data.container.time + data.CD.containerPh.time
             totalDiffer.value = data.devTime.differ + data.CI.differ + data.container.differ + data.CD.containerPh.differ
             if(data.CD.resourcePh) {
                 totalTime.value += data.CD.resourcePh.time

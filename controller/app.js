@@ -57,6 +57,8 @@ router.get('/getCdTime', async ctx => {
             delete urlParmas.sign
             delete urlParmas.noCache
         }
+        ctx.body = res
+        await cacheCD(JSON.parse(res).data, urlParmas)
     } catch (error) {
         res = {
             code: 500,
@@ -64,8 +66,6 @@ router.get('/getCdTime', async ctx => {
         }
         return
     }
-    ctx.body = res
-    await cacheCD(JSON.parse(res).data, urlParmas)
 })
 
 // 获取sns部门CD发布数据

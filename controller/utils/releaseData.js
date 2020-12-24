@@ -13,6 +13,7 @@ const getCDData = (env, isSns = 0) => {
                 stime: formatTime((new Date()).getTime() - 14 * 24 * 60 * 60 * 1000),
                 env
             }, isSns)
+
             const nowContainerData = nowData.filter(item => {
                 return item.program_name.indexOf('thsi_resource') == -1
             })
@@ -123,12 +124,12 @@ const mock = (env) => {
                     differ: 0
                 },
                 CI: {
-                    time: 43.9,
-                    differ: -32.5
+                    time: 52.5,
+                    differ: 8.6
                 },
                 container: {
-                    time: 54,
-                    differ: 0
+                    time: 22,
+                    differ: -34
                 }
             }
         } else {
@@ -138,12 +139,12 @@ const mock = (env) => {
                     differ: 0
                 },
                 CI: {
-                    time: 63.7,
-                    differ: -45.8
+                    time: 48.5,
+                    differ: -15.2
                 },
                 container: {
-                    time: 54,
-                    differ: 0
+                    time: 22,
+                    differ: -34
                 }
             }
         }

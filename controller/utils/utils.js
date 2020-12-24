@@ -16,6 +16,7 @@ const fetch = (url, params) => {
     }
     return new Promise((resolve, reject) => {
         request(url + formatParams(params), (error, response, body) => {
+            console.log(url + formatParams(params))
             if(error) {
                 reject(error)
             } else if (response.statusCode == 200) {
