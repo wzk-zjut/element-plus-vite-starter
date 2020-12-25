@@ -12,7 +12,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "pm2 start app.js --watch"
   },
   "author": "wangzhengkai",
   "license": "ISC"

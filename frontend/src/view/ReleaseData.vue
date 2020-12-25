@@ -116,7 +116,8 @@ export default {
             isLoading.value = true
             window.snsHttp({
                 url: "http://localhost:7280/releaseData",
-                urlParams: params
+                urlParams: params,
+                timeout: 120000
             }).then((res: any) => {
                 const { errorCode, errorMsg, result } = res;
                 if(errorCode === 0) {

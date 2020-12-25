@@ -78,7 +78,7 @@ router.get('/getSnsCd', async ctx => {
         }
         return
     }
-    const snsObj = [
+        const snsObj = [
         'website-frontend-wd-container',
         'sns-gsjl-frontend-container',
         'sns-tgtab-frontend-container',
