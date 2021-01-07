@@ -80,7 +80,7 @@
 import { ref, onMounted } from "vue";
 import { ElMessage } from "element-plus";
 export default {
-    name: "ReleaseTable",
+    name: "CDTable",
     setup() {
         const releaseData = ref<release.CDData[]>([]);
         const seachValue = ref<string>("");

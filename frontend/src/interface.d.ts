@@ -24,4 +24,12 @@ declare namespace release {
         time: number;
         differ: number;
     }
+
+    export interface CIData {
+        name: string;
+        ave_time: number;
+        max_time: number;
+        failed: number;
+        count: number;
+    }
 }

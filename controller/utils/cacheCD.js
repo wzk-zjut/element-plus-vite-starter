@@ -1,8 +1,13 @@
 const cachestr = require('../cache/cache')
-const { formatParams } = require('./utils')
+const {
+    formatParams
+} = require('./utils')
 const fs = require('fs')
 
-let cacheObj = JSON.parse(cachestr)
+let cacheObj = {}
+if (cachestr) {
+    cacheObj = JSON.parse(cachestr)
+}
 
 
 // 读取缓存逻辑
@@ -38,7 +43,7 @@ const cacheCD = (data, params) => {
             if (res) {
                 cacheObj.cache = cacheObj.cache.map(item => {
                     if (item.params == paramsStr) {
-                        item.data = data
+                        item.data = data     
                     }
                     return item
                 })

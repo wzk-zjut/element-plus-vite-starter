@@ -10,7 +10,7 @@ const formatParams = (params) => {
     return paramsStr
 }
 
-const fetch = (url, params) => {
+const fetch = (url, params, isContainer = false) => {
     if(url.indexOf('?') === -1) {
         url = url + '?'
     }
@@ -19,7 +19,7 @@ const fetch = (url, params) => {
             console.log(url + formatParams(params))
             if(error) {
                 reject(error)
-            } else if (response.statusCode == 200) {
+            } else if (response.statusCode == 200 || isContainer) {
                 resolve(JSON.parse(body))
             } else {
                 reject()

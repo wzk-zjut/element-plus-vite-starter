@@ -8,6 +8,7 @@
                  router>
             <el-menu-item index="/">发布数据</el-menu-item>
             <el-menu-item index="/CDTable">CD发布数据</el-menu-item>
+            <el-menu-item index="/CITable">CI发布数据</el-menu-item>
         </el-menu>
     </div>
 </template>

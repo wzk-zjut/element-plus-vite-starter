@@ -3,11 +3,12 @@ const router = require('koa-router')();
 const cors = require('koa2-cors')
 const getSign = require('./utils/getSign')
 const { fetchCD, fetchSnsCd } = require('./utils/fetchCD')
-const { getCDData, mock } = require('./utils/releaseData')
+const { getCDData, mock, getCITime, getContainerTime } = require('./utils/releaseData')
 const {
     getCache,
     cacheCD
 } = require('./utils/cacheCD');
+const { fetchCI } = require('./utils/fetchCI')
 
 
 const app = new Koa();
@@ -56,9 +57,14 @@ router.get('/getCdTime', async ctx => {
         if (JSON.parse(res).code == 1) {
             delete urlParmas.sign
             delete urlParmas.noCache
+            await cacheCD(JSON.parse(res).data, urlParmas)
+            ctx.body = res
+        } else {
+            ctx.body = {
+                code: 500,
+                msg: "获取CD数据失败"
+            }
         }
-        ctx.body = res
-        await cacheCD(JSON.parse(res).data, urlParmas)
     } catch (error) {
         res = {
             code: 500,
@@ -111,12 +117,16 @@ router.get('/releaseData', async ctx => {
     let res = new Object()
     try{
         const CDData = await getCDData(urlParmas.env, urlParmas.isSns)
+        const CIData = await getCITime(urlParmas.env)
+        const containerData = await getContainerTime()
         const mockData = await mock(urlParmas.env)
         res = {
             errorCode: 0,
             errorMsg: "success",
             result: {
                 ...mockData,
+                ...CIData,
+                ...containerData,
                 CD: CDData
             }
         }
@@ -129,6 +139,31 @@ router.get('/releaseData', async ctx => {
         return;
     }
     ctx.body = res;
+})
+
+// CI数据接口
+router.get('/getCIData', async ctx => {
+    const urlParmas = ctx.request.query
+    if(urlParmas.branch != 'master' && urlParmas.branch != 'testing') {
+        ctx.body = {
+            errorCode: 100,
+            errorMsg: "参数错误"
+        }
+        return
+    }
+    try{
+        const res = await fetchCI(urlParmas.branch)
+        ctx.body = {
+            errorCode: 0,
+            errorMsg: 'success',
+            result: res
+        }
+    }catch (error) {
+        ctx.body = {
+            errorCode: 500,
+            errorMsg: error
+        }
+    }
 })
 
 app.use(router.routes())
